@@ -22,10 +22,10 @@ export default async function ScreenAdminPage({ params }: { params: Promise<{ sl
                 </div>
                 <div className="flex items-center gap-2">
                     <Link href={`/tv/${screen.slug}`} target="_blank" className="btn btn-outline btn-sm gap-2">
-                        <FaTv className="text-xs" /> Показ
+                        <FaTv className="text-xs" /> Show on TV
                     </Link>
                     <Link href={`/admin/${screen.slug}/new`} className="btn btn-primary btn-sm gap-2">
-                        <FaPlus className="text-xs" /> Добавить
+                        <FaPlus className="text-xs" /> Add
                     </Link>
                 </div>
             </div>

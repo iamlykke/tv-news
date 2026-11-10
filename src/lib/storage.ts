@@ -11,7 +11,8 @@ function getClient(): SupabaseClient {
     if (client) return client;
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!url || !key) throw new AppError('Supabase Storage не настроен (NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)');
+    if (!url || !key)
+        throw new AppError('Supabase Storage is not configured (NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)');
     client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
     return client;
 }
@@ -54,11 +55,11 @@ export type UploadKind = keyof typeof UPLOAD_KINDS;
 export async function createUploadTarget(kind: UploadKind, contentType: string) {
     const config = UPLOAD_KINDS[kind];
     const ext = (config.types as Record<string, string>)[contentType];
-    if (!ext) throw new AppError(`Тип файла ${contentType || 'unknown'} не поддерживается`, 400);
+    if (!ext) throw new AppError(`File type ${contentType || 'unknown'} is not supported`, 400);
 
     const path = `${config.prefix}/${randomUUID()}.${ext}`;
     const { data, error } = await getClient().storage.from(BUCKET).createSignedUploadUrl(path);
-    if (error || !data) throw new AppError(`Не удалось подготовить загрузку: ${error?.message}`, 502);
+    if (error || !data) throw new AppError(`Could not prepare upload: ${error?.message}`, 502);
 
     return { path, token: data.token, bucket: BUCKET };
 }
@@ -67,10 +68,10 @@ export async function createUploadTarget(kind: UploadKind, contentType: string) 
 export async function assertUploaded(kind: UploadKind, path: unknown): Promise<string> {
     const prefix = UPLOAD_KINDS[kind].prefix;
     if (typeof path !== 'string' || !new RegExp(`^${prefix}/[0-9a-f-]{36}\\.[a-z0-9]+$`).test(path)) {
-        throw new AppError('Некорректный путь файла', 400);
+        throw new AppError('Invalid file path', 400);
     }
     const { data, error } = await getClient().storage.from(BUCKET).exists(path);
-    if (error || !data) throw new AppError('Файл не найден в хранилище — загрузите его ещё раз', 400);
+    if (error || !data) throw new AppError('File not found in storage — please upload it again', 400);
     return path;
 }
 

@@ -31,13 +31,18 @@ export function Sparkle({ size, color = PALETTE.ink, style }: { size: number; co
 }
 
 export function Dot({ size, color, style }: { size: number; color: string; style?: CSSProperties }) {
-    return <span className="absolute rounded-full" style={{ width: size, height: size, background: color, ...style }} />;
+    return (
+        <span className="absolute rounded-full" style={{ width: size, height: size, background: color, ...style }} />
+    );
 }
 
 /** Полоса цветных полос внизу слайда — как настроечная таблица на старом ТВ. */
 export function ColorBars({ height = 40 }: { height?: number }) {
     return (
-        <div className="absolute left-0 right-0 bottom-0 flex" style={{ height, borderTop: `8px solid ${PALETTE.ink}` }}>
+        <div
+            className="absolute left-0 right-0 bottom-0 flex"
+            style={{ height, borderTop: `8px solid ${PALETTE.ink}` }}
+        >
             {BARS.map(color => (
                 <div key={color} className="flex-1" style={{ background: color }} />
             ))}

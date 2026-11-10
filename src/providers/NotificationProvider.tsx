@@ -46,7 +46,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                     addNotification(message, 'success', options?.duration),
                 warning: (message: string, options?: NotifyOptions) =>
                     addNotification(message, 'warning', options?.duration),
-                error: (message: string, options?: NotifyOptions) => addNotification(message, 'error', options?.duration),
+                error: (message: string, options?: NotifyOptions) =>
+                    addNotification(message, 'error', options?.duration),
             },
         }),
         [addNotification],

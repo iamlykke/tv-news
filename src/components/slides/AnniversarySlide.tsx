@@ -21,7 +21,11 @@ export default function AnniversarySlide({ anniversary, background }: Props) {
                 style={{ width: 860, background: paper, borderRight: `16px solid ${ink}` }}
             >
                 {photoUrl ? (
-                    <img src={photoUrl} alt={fullName} className="absolute inset-0 w-full h-full object-cover object-top" />
+                    <img
+                        src={photoUrl}
+                        alt={fullName}
+                        className="absolute inset-0 w-full h-full object-cover object-top"
+                    />
                 ) : (
                     <span style={{ fontSize: 300, fontWeight: 900 }}>{initials(fullName)}</span>
                 )}
@@ -35,8 +39,17 @@ export default function AnniversarySlide({ anniversary, background }: Props) {
                 <Dot size={30} color={ink} style={{ right: 330, top: 120 }} />
                 <Dot size={22} color={paper} style={{ right: 150, bottom: 260 }} />
 
-                <div className="absolute flex flex-col items-center text-center" style={{ left: 80, right: 80, top: 90, bottom: 140 }}>
-                    <p style={{ fontSize: nameFontSize(fullName, [84, 72, 60, 50]), fontWeight: 700, lineHeight: 1.05 }}>
+                <div
+                    className="absolute flex flex-col items-center text-center"
+                    style={{ left: 80, right: 80, top: 90, bottom: 140 }}
+                >
+                    <p
+                        style={{
+                            fontSize: nameFontSize(fullName, [84, 72, 60, 50]),
+                            fontWeight: 700,
+                            lineHeight: 1.05,
+                        }}
+                    >
                         {fullName}
                     </p>
 

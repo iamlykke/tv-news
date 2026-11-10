@@ -45,16 +45,16 @@ type PersonInput = {
 function parseDay(value: unknown, field: string): Date | null {
     if (value === null || value === undefined || value === '') return null;
     const date = isoDayToDate(String(value));
-    if (!date) throw new ValidationError(`${field}: ожидается дата yyyy-MM-dd`);
+    if (!date) throw new ValidationError(`${field}: expected a yyyy-MM-dd date`);
     return date;
 }
 
 async function parseScreenId(value: unknown): Promise<number | null> {
     if (value === null || value === undefined || value === '') return null;
     const id = Number(value);
-    if (!Number.isInteger(id)) throw new ValidationError('Некорректный экран');
+    if (!Number.isInteger(id)) throw new ValidationError('Invalid screen');
     const exists = await prisma.screen.findUnique({ where: { id } });
-    if (!exists) throw new ValidationError('Экран не найден');
+    if (!exists) throw new ValidationError('Screen not found');
     return id;
 }
 
@@ -67,7 +67,7 @@ export async function listPeople(): Promise<TPerson[]> {
 export async function createPerson(input: PersonInput): Promise<TPerson> {
     await getCurrentUser();
     const fullName = String(input.fullName ?? '').trim();
-    if (!fullName) throw new ValidationError('Укажите имя');
+    if (!fullName) throw new ValidationError('Enter a name');
 
     const person = await prisma.person.create({
         data: {
@@ -86,12 +86,12 @@ export async function createPerson(input: PersonInput): Promise<TPerson> {
 export async function updatePerson(id: number, input: PersonInput): Promise<TPerson> {
     await getCurrentUser();
     const current = await prisma.person.findUnique({ where: { id } });
-    if (!current) throw new NotFoundError('Человек не найден');
+    if (!current) throw new NotFoundError('Person not found');
 
     const data: Record<string, unknown> = {};
     if (input.fullName !== undefined) {
         const fullName = String(input.fullName).trim();
-        if (!fullName) throw new ValidationError('Укажите имя');
+        if (!fullName) throw new ValidationError('Enter a name');
         data.fullName = fullName;
     }
     let oldPhoto: string | null = null;
@@ -112,7 +112,7 @@ export async function updatePerson(id: number, input: PersonInput): Promise<TPer
 export async function deletePerson(id: number) {
     await getCurrentUser();
     const person = await prisma.person.findUnique({ where: { id } });
-    if (!person) throw new NotFoundError('Человек не найден');
+    if (!person) throw new NotFoundError('Person not found');
     await prisma.person.delete({ where: { id } });
     await removeFiles([person.photoPath]);
 }

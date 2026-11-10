@@ -13,6 +13,6 @@ export const getCurrentUser = cache(async () => {
 
 export const requireFullAdmin = async () => {
     const user = await getCurrentUser();
-    if (user.role !== 'ROLE_FULL_ADMIN') throw new ForbiddenError('Недостаточно прав');
+    if (user.role !== 'ROLE_FULL_ADMIN') throw new ForbiddenError('Insufficient permissions');
     return user;
 };

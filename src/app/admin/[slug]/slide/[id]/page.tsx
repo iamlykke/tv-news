@@ -22,11 +22,11 @@ export default function EditSlidePage({ params }: { params: Promise<{ slug: stri
         <div>
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
-                    <h1 className="text-2xl font-semibold">Слайд #{id}</h1>
+                    <h1 className="text-2xl font-semibold">Slide #{id}</h1>
                     {slide && <StatusBadge status={slide.status} />}
                 </div>
                 <Link href={`/admin/${slug}`} className="btn btn-ghost btn-sm">
-                    ← К слайдам
+                    ← Back to slides
                 </Link>
             </div>
             {error && <div className="alert alert-error mt-6">{error}</div>}

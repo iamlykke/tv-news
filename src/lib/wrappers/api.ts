@@ -23,12 +23,12 @@ export async function readJson<T = Record<string, unknown>>(req: Request): Promi
     try {
         return (await req.json()) as T;
     } catch {
-        throw new AppError('Некорректный JSON', 400);
+        throw new AppError('Invalid JSON', 400);
     }
 }
 
 export function parseId(value: string): number {
     const id = Number(value);
-    if (!Number.isInteger(id) || id <= 0) throw new AppError('Некорректный id', 400);
+    if (!Number.isInteger(id) || id <= 0) throw new AppError('Invalid id', 400);
     return id;
 }

@@ -19,12 +19,12 @@ const text = Manrope({
 
 export const metadata: Metadata = {
     title: 'TV Slides',
-    description: 'Слайды для офисных экранов',
+    description: 'Slides for office screens',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="ru" data-theme="light">
+        <html lang="en" data-theme="light">
             <body className={`${display.variable} ${text.variable} font-text antialiased`} suppressHydrationWarning>
                 <VersionChecker />
                 <ClientSessionProvider>

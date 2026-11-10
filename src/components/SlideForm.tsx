@@ -75,12 +75,12 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
 
             if (isEdit) {
                 const updated = await api<TSlide>(`/api/admin/slides/${slide.id}`, { method: 'PATCH', json: payload });
-                notify.success('Слайд обновлён');
+                notify.success('Slide updated');
                 setValue('file', undefined as unknown as FileList);
                 onSaved?.(updated);
             } else {
                 await api(`/api/admin/screen/${slug}/slides`, { method: 'POST', json: payload });
-                notify.success('Слайд добавлен');
+                notify.success('Slide added');
                 router.push(`/admin/${slug}`);
                 router.refresh();
             }
@@ -96,7 +96,7 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
         setDeleting(true);
         try {
             await api(`/api/admin/slides/${slide.id}`, { method: 'DELETE' });
-            notify.success('Слайд удалён');
+            notify.success('Slide deleted');
             router.push(`/admin/${slug}`);
         } catch (e) {
             notify.error(errorMessage(e));
@@ -108,48 +108,48 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
         <div className="flex flex-col xl:flex-row gap-8 mt-6">
             <form onSubmit={handleSubmit(onSubmit)} className="flex-1 max-w-lg space-y-4">
                 <fieldset className="fieldset">
-                    <legend className="fieldset-legend">{isEdit ? 'Заменить файл' : 'Файл слайда'}</legend>
+                    <legend className="fieldset-legend">{isEdit ? 'Replace file' : 'Slide file'}</legend>
                     <input
                         {...register('file', {
                             validate: list => {
                                 const file = list?.[0];
-                                if (!file) return isEdit || 'Выберите файл';
-                                return ALLOWED.has(file.type) || 'Можно JPG, PNG, WebP, AVIF, MP4 или WebM';
+                                if (!file) return isEdit || 'Choose a file';
+                                return ALLOWED.has(file.type) || 'Allowed: JPG, PNG, WebP, AVIF, MP4 or WebM';
                             },
                         })}
                         type="file"
                         accept={ACCEPT}
                         className={`file-input w-full ${errors.file ? 'file-input-error' : ''}`}
                     />
-                    <p className="label">Лучше всего 1920×1080. Видео — без звука, крутится по кругу.</p>
+                    <p className="label">Best at 1920×1080. Videos play muted, on loop.</p>
                     {errors.file && <p className="text-error text-sm">{errors.file.message}</p>}
                 </fieldset>
 
                 <fieldset className="fieldset">
-                    <legend className="fieldset-legend">Показывать с</legend>
+                    <legend className="fieldset-legend">Show from</legend>
                     <div className="join w-full">
                         <input {...register('showAfter')} type="datetime-local" className="input join-item flex-1" />
                         <button type="button" className="btn join-item" onClick={() => setValue('showAfter', '')}>
                             ✕
                         </button>
                     </div>
-                    <p className="label">Пусто — сразу</p>
+                    <p className="label">Empty — right away</p>
                 </fieldset>
 
                 <fieldset className="fieldset">
-                    <legend className="fieldset-legend">Снять с показа после</legend>
+                    <legend className="fieldset-legend">Take down after</legend>
                     <div className="join w-full">
                         <input {...register('deleteAfter')} type="datetime-local" className="input join-item flex-1" />
                         <button type="button" className="btn join-item" onClick={() => setValue('deleteAfter', '')}>
                             ✕
                         </button>
                     </div>
-                    <p className="label">Пусто — бессрочно</p>
+                    <p className="label">Empty — no end date</p>
                 </fieldset>
 
                 <label className="label cursor-pointer gap-3">
                     <input {...register('isHidden')} type="checkbox" className="toggle toggle-warning" />
-                    Скрыть слайд
+                    Hide slide
                 </label>
 
                 <div className="divider my-2" />
@@ -157,11 +157,15 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
                 <div className="flex gap-3">
                     <button type="submit" disabled={saving} className="btn btn-primary flex-1">
                         {saving && <span className="loading loading-spinner loading-sm" />}
-                        {isEdit ? 'Сохранить' : 'Добавить'}
+                        {isEdit ? 'Save' : 'Add'}
                     </button>
                     {isEdit && !slide.isDeleted && (
-                        <button type="button" onClick={() => setConfirmDelete(true)} className="btn btn-outline btn-error flex-1">
-                            Удалить
+                        <button
+                            type="button"
+                            onClick={() => setConfirmDelete(true)}
+                            className="btn btn-outline btn-error flex-1"
+                        >
+                            Delete
                         </button>
                     )}
                 </div>
@@ -171,7 +175,14 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
                 {localPreview ? (
                     <div className="rounded-xl overflow-hidden border border-base-300 bg-black">
                         {localPreview.isVideo ? (
-                            <video src={localPreview.url} className="w-full aspect-video object-cover" autoPlay loop muted playsInline />
+                            <video
+                                src={localPreview.url}
+                                className="w-full aspect-video object-cover"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            />
                         ) : (
                             <img src={localPreview.url} alt="" className="w-full aspect-video object-cover" />
                         )}
@@ -180,7 +191,7 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
                     <SlidePreview slide={slide} editable={false} />
                 ) : (
                     <div className="rounded-xl border border-dashed border-base-300 aspect-video flex items-center justify-center text-base-content/40">
-                        Превью появится после выбора файла
+                        Preview appears after you pick a file
                     </div>
                 )}
             </div>
@@ -188,12 +199,12 @@ export default function SlideForm({ slug, slide, onSaved }: Props) {
             <Modal
                 id="confirm-delete-slide"
                 isOpen={confirmDelete}
-                title="Удалить слайд?"
+                title="Delete slide?"
                 onConfirm={onDelete}
                 onClose={() => setConfirmDelete(false)}
                 isLoading={deleting}
             >
-                Слайд пропадёт с экрана, но останется в истории «Все слайды».
+                The slide will disappear from the screen but stay in the “All slides” history.
             </Modal>
         </div>
     );

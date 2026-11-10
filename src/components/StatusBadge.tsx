@@ -2,11 +2,11 @@ import { FaClock, FaEye, FaEyeSlash, FaHourglassEnd, FaTrash } from 'react-icons
 import type { TSlideStatus } from '@/types';
 
 const CONFIG: Record<TSlideStatus, { label: string; className: string; icon: React.ReactNode }> = {
-    live: { label: 'В эфире', className: 'badge-success', icon: <FaEye /> },
-    hidden: { label: 'Скрыт', className: 'badge-warning', icon: <FaEyeSlash /> },
-    scheduled: { label: 'Запланирован', className: 'badge-info', icon: <FaClock /> },
-    expired: { label: 'Истёк', className: 'badge-neutral', icon: <FaHourglassEnd /> },
-    deleted: { label: 'Удалён', className: 'badge-error', icon: <FaTrash /> },
+    live: { label: 'Live', className: 'badge-success', icon: <FaEye /> },
+    hidden: { label: 'Hidden', className: 'badge-warning', icon: <FaEyeSlash /> },
+    scheduled: { label: 'Scheduled', className: 'badge-info', icon: <FaClock /> },
+    expired: { label: 'Expired', className: 'badge-neutral', icon: <FaHourglassEnd /> },
+    deleted: { label: 'Deleted', className: 'badge-error', icon: <FaTrash /> },
 };
 
 export default function StatusBadge({ status }: { status: TSlideStatus }) {

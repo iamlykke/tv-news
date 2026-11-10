@@ -6,8 +6,8 @@ import { signIn, useSession } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 
 const ERRORS: Record<string, string> = {
-    AccessDenied: 'У этого аккаунта нет доступа. Попросите администратора добавить ваш email.',
-    OAuthAccountNotLinked: 'Этот Google-аккаунт уже связан с другим способом входа',
+    AccessDenied: 'This account has no access. Ask an admin to add your email.',
+    OAuthAccountNotLinked: 'This Google account is already linked to another sign-in method',
 };
 
 export default function LoginPageInner() {
@@ -16,7 +16,7 @@ export default function LoginPageInner() {
     const params = useSearchParams();
     const error = params.get('error');
     const callbackUrl = params.get('callbackUrl') || '/admin';
-    const errorMessage = error ? (ERRORS[error] ?? 'Ошибка авторизации') : null;
+    const errorMessage = error ? (ERRORS[error] ?? 'Sign-in error') : null;
 
     useEffect(() => {
         if (session?.user?.id) router.replace(callbackUrl);
@@ -29,10 +29,10 @@ export default function LoginPageInner() {
                     <img src="/logo.svg" alt="" className="w-16 h-16" />
                     <div>
                         <h1 className="font-display text-2xl font-bold">TV Slides</h1>
-                        <p className="text-sm text-base-content/60 mt-1">Управление слайдами на офисных экранах</p>
+                        <p className="text-sm text-base-content/60 mt-1">Manage slides on office screens</p>
                     </div>
                     <button className="btn btn-outline w-full gap-2" onClick={() => signIn('google', { callbackUrl })}>
-                        <FcGoogle className="text-xl" /> Войти через Google
+                        <FcGoogle className="text-xl" /> Sign in with Google
                     </button>
                     {errorMessage && <p className="text-error text-sm">{errorMessage}</p>}
                 </div>

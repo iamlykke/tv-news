@@ -11,7 +11,14 @@ import type { TScreen, TUser } from '@/types';
 
 type FormValues = { name: string; slug: string; timezone: string };
 
-const TIMEZONE_HINTS = ['America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Belgrade', 'Europe/Berlin', 'UTC'];
+const TIMEZONE_HINTS = [
+    'America/New_York',
+    'America/Los_Angeles',
+    'Europe/London',
+    'Europe/Belgrade',
+    'Europe/Berlin',
+    'UTC',
+];
 
 export default function ScreensPage() {
     const router = useRouter();
@@ -34,7 +41,9 @@ export default function ScreensPage() {
 
     useEffect(() => {
         load();
-        api<TUser>('/api/admin/me').then(setMe).catch(() => {});
+        api<TUser>('/api/admin/me')
+            .then(setMe)
+            .catch(() => {});
     }, [load]);
 
     const openForm = (screen: TScreen | 'new') => {
@@ -47,10 +56,10 @@ export default function ScreensPage() {
         try {
             if (editing === 'new') await api('/api/admin/screens', { method: 'POST', json: data });
             else if (editing) await api(`/api/admin/screens/${editing.id}`, { method: 'PATCH', json: data });
-            notify.success('Сохранено');
+            notify.success('Saved');
             setEditing(null);
             await load();
-            router.refresh(); // обновить список экранов в сайдбаре
+            router.refresh(); // refresh the screen list in the sidebar
         } catch (e) {
             notify.error(errorMessage(e));
         } finally {
@@ -63,7 +72,7 @@ export default function ScreensPage() {
         setBusy(true);
         try {
             await api(`/api/admin/screens/${deleting.id}`, { method: 'DELETE' });
-            notify.success('Экран удалён');
+            notify.success('Screen deleted');
             setDeleting(null);
             await load();
             router.refresh();
@@ -78,12 +87,12 @@ export default function ScreensPage() {
         <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-semibold">Экраны</h1>
-                    <p className="text-sm text-base-content/60">Каждый экран открывается на ТВ по адресу /tv/&lt;slug&gt;</p>
+                    <h1 className="text-2xl font-semibold">Screens</h1>
+                    <p className="text-sm text-base-content/60">Open /tv/&lt;slug&gt; on the TV to show a screen</p>
                 </div>
                 {canEdit && (
                     <button className="btn btn-primary btn-sm gap-2" onClick={() => openForm('new')}>
-                        <FaPlus className="text-xs" /> Добавить
+                        <FaPlus className="text-xs" /> Add
                     </button>
                 )}
             </div>
@@ -96,10 +105,10 @@ export default function ScreensPage() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Название</th>
+                            <th>Name</th>
                             <th>Slug</th>
-                            <th>Часовой пояс</th>
-                            <th>Адрес для ТВ</th>
+                            <th>Timezone</th>
+                            <th>TV URL</th>
                             {canEdit && <th className="w-28"></th>}
                         </tr>
                     </thead>
@@ -119,10 +128,16 @@ export default function ScreensPage() {
                                 {canEdit && (
                                     <td>
                                         <div className="flex gap-1 justify-end">
-                                            <button className="btn btn-ghost btn-sm btn-square" onClick={() => openForm(screen)}>
+                                            <button
+                                                className="btn btn-ghost btn-sm btn-square"
+                                                onClick={() => openForm(screen)}
+                                            >
                                                 <FaEdit />
                                             </button>
-                                            <button className="btn btn-ghost btn-sm btn-square text-error" onClick={() => setDeleting(screen)}>
+                                            <button
+                                                className="btn btn-ghost btn-sm btn-square text-error"
+                                                onClick={() => setDeleting(screen)}
+                                            >
                                                 <FaTrash />
                                             </button>
                                         </div>
@@ -137,30 +152,34 @@ export default function ScreensPage() {
             <Modal
                 id="screen-form"
                 isOpen={editing !== null}
-                title={editing === 'new' ? 'Новый экран' : 'Редактировать экран'}
+                title={editing === 'new' ? 'New screen' : 'Edit screen'}
                 onConfirm={handleSubmit(onSubmit)}
                 onClose={() => setEditing(null)}
-                confirmText="Сохранить"
+                confirmText="Save"
                 isLoading={busy}
             >
                 <div className="flex flex-col gap-3">
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Название</legend>
-                        <input {...register('name', { required: true })} className="input w-full" placeholder="Serbia" />
+                        <legend className="fieldset-legend">Name</legend>
+                        <input
+                            {...register('name', { required: true })}
+                            className="input w-full"
+                            placeholder="Serbia"
+                        />
                     </fieldset>
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Slug (часть адреса)</legend>
+                        <legend className="fieldset-legend">Slug (part of the URL)</legend>
                         <input {...register('slug', { required: true })} className="input w-full" placeholder="rs" />
                     </fieldset>
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Часовой пояс</legend>
+                        <legend className="fieldset-legend">Timezone</legend>
                         <input {...register('timezone', { required: true })} className="input w-full" list="tz-hints" />
                         <datalist id="tz-hints">
                             {TIMEZONE_HINTS.map(tz => (
                                 <option key={tz} value={tz} />
                             ))}
                         </datalist>
-                        <p className="label">По нему определяется «сегодня» для дней рождения и годовщин</p>
+                        <p className="label">Used to decide what “today” is for birthdays and anniversaries</p>
                     </fieldset>
                 </div>
             </Modal>
@@ -168,12 +187,12 @@ export default function ScreensPage() {
             <Modal
                 id="screen-delete"
                 isOpen={deleting !== null}
-                title={`Удалить экран «${deleting?.name}»?`}
+                title={`Delete screen “${deleting?.name}”?`}
                 onConfirm={onDelete}
                 onClose={() => setDeleting(null)}
                 isLoading={busy}
             >
-                Все слайды этого экрана будут удалены. Люди, привязанные к нему, станут «на всех экранах».
+                All slides on this screen will be deleted. People assigned to it will move to “All screens”.
             </Modal>
         </div>
     );

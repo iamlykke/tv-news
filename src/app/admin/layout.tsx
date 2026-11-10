@@ -40,32 +40,32 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 </Link>
 
                 <nav className="flex-1 overflow-y-auto">
-                    <p className="px-3 mb-1 text-xs uppercase tracking-wider text-base-content/50">Экраны</p>
+                    <p className="px-3 mb-1 text-xs uppercase tracking-wider text-base-content/50">Screens</p>
                     <ul className="menu w-full p-0 mb-4">
                         {screens.map(screen => (
                             <NavLink key={screen.id} href={`/admin/${screen.slug}`} icon={<FaTv />}>
                                 {screen.name}
                             </NavLink>
                         ))}
-                        {screens.length === 0 && <li className="px-3 text-sm text-base-content/50">Пока пусто</li>}
+                        {screens.length === 0 && <li className="px-3 text-sm text-base-content/50">Nothing yet</li>}
                     </ul>
 
-                    <p className="px-3 mb-1 text-xs uppercase tracking-wider text-base-content/50">Управление</p>
+                    <p className="px-3 mb-1 text-xs uppercase tracking-wider text-base-content/50">Manage</p>
                     <ul className="menu w-full p-0">
                         <NavLink href="/admin/slides" icon={<FaImages />}>
-                            Все слайды
+                            All slides
                         </NavLink>
                         <NavLink href="/admin/people" icon={<FaUsers />}>
-                            Люди
+                            People
                         </NavLink>
                         <NavLink href="/admin/celebrations" icon={<FaBirthdayCake />}>
-                            Праздники
+                            Celebrations
                         </NavLink>
                         <NavLink href="/admin/screens" icon={<FaDesktop />}>
-                            Экраны
+                            Screens
                         </NavLink>
                         <NavLink href="/admin/users" icon={<FaUserShield />}>
-                            Администраторы
+                            Admins
                         </NavLink>
                     </ul>
                 </nav>

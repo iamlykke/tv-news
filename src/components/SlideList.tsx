@@ -35,8 +35,8 @@ export default function SlideList({ slug }: { slug: string }) {
         <div className="flex flex-col gap-10">
             {data.slides.length === 0 ? (
                 <div className="text-center py-16 text-base-content/50">
-                    <p className="text-lg">Нет слайдов</p>
-                    <p className="text-sm mt-1">Добавьте первый слайд кнопкой выше</p>
+                    <p className="text-lg">No slides</p>
+                    <p className="text-sm mt-1">Add the first slide with the button above</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">

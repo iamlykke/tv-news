@@ -32,7 +32,7 @@ export default function AllSlidesPage() {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center gap-4">
-                <h1 className="text-2xl font-semibold">Все слайды</h1>
+                <h1 className="text-2xl font-semibold">All slides</h1>
                 <select
                     className="select select-sm w-48"
                     value={screenFilter}
@@ -41,7 +41,7 @@ export default function AllSlidesPage() {
                         setPage(1);
                     }}
                 >
-                    <option value="">Все экраны</option>
+                    <option value="">All screens</option>
                     {screens.map(([slug, name]) => (
                         <option key={slug} value={slug}>
                             {name}
@@ -62,12 +62,12 @@ export default function AllSlidesPage() {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Превью</th>
-                                <th>Экран</th>
-                                <th>Создан</th>
-                                <th>Показ с</th>
-                                <th>Снять после</th>
-                                <th>Статус</th>
+                                <th>Preview</th>
+                                <th>Screen</th>
+                                <th>Created</th>
+                                <th>Show from</th>
+                                <th>Take down after</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,9 +77,19 @@ export default function AllSlidesPage() {
                                     <td>
                                         <Link href={`/admin/${slide.screen.slug}/slide/${slide.id}`}>
                                             {slide.isVideo ? (
-                                                <video src={slide.url} className="w-36 aspect-video object-cover rounded bg-black" muted preload="metadata" />
+                                                <video
+                                                    src={slide.url}
+                                                    className="w-36 aspect-video object-cover rounded bg-black"
+                                                    muted
+                                                    preload="metadata"
+                                                />
                                             ) : (
-                                                <img src={slide.url} alt="" className="w-36 aspect-video object-cover rounded bg-black" loading="lazy" />
+                                                <img
+                                                    src={slide.url}
+                                                    alt=""
+                                                    className="w-36 aspect-video object-cover rounded bg-black"
+                                                    loading="lazy"
+                                                />
                                             )}
                                         </Link>
                                     </td>
@@ -95,7 +105,7 @@ export default function AllSlidesPage() {
                             {pageSlides.length === 0 && (
                                 <tr>
                                     <td colSpan={7} className="text-center py-8 text-base-content/50">
-                                        Нет загруженных слайдов
+                                        No slides uploaded
                                     </td>
                                 </tr>
                             )}
@@ -107,10 +117,14 @@ export default function AllSlidesPage() {
             {totalPages > 1 && (
                 <div className="flex items-center justify-between">
                     <span className="text-sm text-base-content/60">
-                        Страница {current} из {totalPages} · всего {filtered.length}
+                        Page {current} of {totalPages} · {filtered.length} total
                     </span>
                     <div className="join">
-                        <button className="join-item btn btn-sm" disabled={current === 1} onClick={() => setPage(current - 1)}>
+                        <button
+                            className="join-item btn btn-sm"
+                            disabled={current === 1}
+                            onClick={() => setPage(current - 1)}
+                        >
                             ‹
                         </button>
                         <button className="join-item btn btn-sm btn-active">{current}</button>

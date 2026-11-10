@@ -12,7 +12,7 @@ export const GET = apiHandler(async (req: NextRequest) => {
 
     const screen = slug ? await findScreenBySlug(slug) : null;
     const target = dateParam ? parseIsoDay(dateParam) : todayIn(screen?.timezone ?? 'UTC');
-    if (!target) throw new ValidationError('date: ожидается yyyy-MM-dd');
+    if (!target) throw new ValidationError('date: expected yyyy-MM-dd');
 
     return NextResponse.json(await getCelebrations(target, screen?.id));
 });

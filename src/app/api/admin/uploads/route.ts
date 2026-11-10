@@ -8,6 +8,6 @@ import { ValidationError } from '@/lib/errors';
 export const POST = apiHandler(async (req: NextRequest) => {
     await getCurrentUser();
     const { kind, contentType } = await readJson<{ kind?: string; contentType?: string }>(req);
-    if (!kind || !(kind in UPLOAD_KINDS)) throw new ValidationError('Неизвестный тип загрузки');
+    if (!kind || !(kind in UPLOAD_KINDS)) throw new ValidationError('Unknown upload kind');
     return NextResponse.json(await createUploadTarget(kind as UploadKind, String(contentType ?? '')));
 });

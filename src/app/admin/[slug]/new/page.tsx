@@ -13,9 +13,9 @@ export default async function NewSlidePage({ params }: { params: Promise<{ slug:
     return (
         <div>
             <div className="flex justify-between items-center gap-4">
-                <h1 className="text-2xl font-semibold">Новый слайд · {screen.name}</h1>
+                <h1 className="text-2xl font-semibold">New slide · {screen.name}</h1>
                 <Link href={`/admin/${slug}`} className="btn btn-ghost btn-sm">
-                    ← К слайдам
+                    ← Back to slides
                 </Link>
             </div>
             <SlideForm slug={slug} />

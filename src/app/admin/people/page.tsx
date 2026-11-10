@@ -60,7 +60,9 @@ export default function PeoplePage() {
 
     useEffect(() => {
         load();
-        api<TScreen[]>('/api/admin/screens').then(setScreens).catch(() => {});
+        api<TScreen[]>('/api/admin/screens')
+            .then(setScreens)
+            .catch(() => {});
     }, [load]);
 
     const openForm = (person: TPerson | 'new') => {
@@ -98,10 +100,10 @@ export default function PeoplePage() {
 
             if (editing === 'new') {
                 await api('/api/admin/people', { method: 'POST', json: payload });
-                notify.success('Добавлено');
+                notify.success('Added');
             } else if (editing) {
                 await api(`/api/admin/people/${editing.id}`, { method: 'PATCH', json: payload });
-                notify.success('Сохранено');
+                notify.success('Saved');
             }
             setEditing(null);
             await load();
@@ -117,7 +119,7 @@ export default function PeoplePage() {
         setBusy(true);
         try {
             await api(`/api/admin/people/${deleting.id}`, { method: 'DELETE' });
-            notify.success('Удалено');
+            notify.success('Deleted');
             setDeleting(null);
             await load();
         } catch (e) {
@@ -134,18 +136,20 @@ export default function PeoplePage() {
         <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold">Люди</h1>
-                    <p className="text-sm text-base-content/60">По этим данным собираются слайды дней рождения и годовщин</p>
+                    <h1 className="text-2xl font-semibold">People</h1>
+                    <p className="text-sm text-base-content/60">
+                        Birthday and anniversary slides are built from this list
+                    </p>
                 </div>
                 <div className="flex gap-2">
                     <input
                         className="input input-sm w-56"
-                        placeholder="Поиск по имени"
+                        placeholder="Search by name"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />
                     <button className="btn btn-primary btn-sm gap-2" onClick={() => openForm('new')}>
-                        <FaPlus className="text-xs" /> Добавить
+                        <FaPlus className="text-xs" /> Add
                     </button>
                 </div>
             </div>
@@ -160,11 +164,11 @@ export default function PeoplePage() {
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>Имя</th>
-                                <th>День рождения</th>
-                                <th>В команде с</th>
-                                <th>Экран</th>
-                                <th>Статус</th>
+                                <th>Name</th>
+                                <th>Birthday</th>
+                                <th>Joined</th>
+                                <th>Screen</th>
+                                <th>Status</th>
                                 <th className="w-28"></th>
                             </tr>
                         </thead>
@@ -177,21 +181,27 @@ export default function PeoplePage() {
                                     <td className="font-medium">{person.fullName}</td>
                                     <td>{formatDay(person.dateOfBirth)}</td>
                                     <td>{formatDay(person.startDate)}</td>
-                                    <td>{person.screen?.name ?? 'Все экраны'}</td>
+                                    <td>{person.screen?.name ?? 'All screens'}</td>
                                     <td>
-                                        <span className={`badge badge-sm ${person.isActive ? 'badge-success' : 'badge-ghost'}`}>
-                                            {person.isActive ? 'Активен' : 'Не показывать'}
+                                        <span
+                                            className={`badge badge-sm ${person.isActive ? 'badge-success' : 'badge-ghost'}`}
+                                        >
+                                            {person.isActive ? 'Active' : 'Hidden'}
                                         </span>
                                     </td>
                                     <td>
                                         <div className="flex gap-1 justify-end">
-                                            <button className="btn btn-ghost btn-sm btn-square" onClick={() => openForm(person)} title="Редактировать">
+                                            <button
+                                                className="btn btn-ghost btn-sm btn-square"
+                                                onClick={() => openForm(person)}
+                                                title="Edit"
+                                            >
                                                 <FaEdit />
                                             </button>
                                             <button
                                                 className="btn btn-ghost btn-sm btn-square text-error"
                                                 onClick={() => setDeleting(person)}
-                                                title="Удалить"
+                                                title="Delete"
                                             >
                                                 <FaTrash />
                                             </button>
@@ -202,7 +212,9 @@ export default function PeoplePage() {
                             {filtered.length === 0 && (
                                 <tr>
                                     <td colSpan={7} className="text-center py-8 text-base-content/50">
-                                        {people.length === 0 ? 'Список пуст — добавьте первого человека' : 'Никого не нашлось'}
+                                        {people.length === 0
+                                            ? 'The list is empty — add the first person'
+                                            : 'Nobody found'}
                                     </td>
                                 </tr>
                             )}
@@ -214,38 +226,40 @@ export default function PeoplePage() {
             <Modal
                 id="person-form"
                 isOpen={editing !== null}
-                title={editing === 'new' ? 'Новый человек' : 'Редактировать'}
+                title={editing === 'new' ? 'New person' : 'Edit'}
                 onConfirm={handleSubmit(onSubmit)}
                 onClose={() => setEditing(null)}
-                confirmText={editing === 'new' ? 'Добавить' : 'Сохранить'}
+                confirmText={editing === 'new' ? 'Add' : 'Save'}
                 isLoading={busy}
             >
                 <div className="flex flex-col gap-3">
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Имя и фамилия</legend>
+                        <legend className="fieldset-legend">Full name</legend>
                         <input
-                            {...register('fullName', { required: 'Обязательное поле' })}
+                            {...register('fullName', { required: 'Required' })}
                             className={`input w-full ${formState.errors.fullName ? 'input-error' : ''}`}
                             placeholder="Jane Doe"
                         />
-                        {formState.errors.fullName && <p className="text-error text-sm">{formState.errors.fullName.message}</p>}
+                        {formState.errors.fullName && (
+                            <p className="text-error text-sm">{formState.errors.fullName.message}</p>
+                        )}
                     </fieldset>
 
                     <div className="grid grid-cols-2 gap-3">
                         <fieldset className="fieldset">
-                            <legend className="fieldset-legend">День рождения</legend>
+                            <legend className="fieldset-legend">Birthday</legend>
                             <input {...register('dateOfBirth')} type="date" className="input w-full" />
                         </fieldset>
                         <fieldset className="fieldset">
-                            <legend className="fieldset-legend">В команде с</legend>
+                            <legend className="fieldset-legend">Joined</legend>
                             <input {...register('startDate')} type="date" className="input w-full" />
                         </fieldset>
                     </div>
 
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Экран</legend>
+                        <legend className="fieldset-legend">Screen</legend>
                         <select {...register('screenId')} className="select w-full">
-                            <option value="">Все экраны</option>
+                            <option value="">All screens</option>
                             {screens.map(s => (
                                 <option key={s.id} value={s.id}>
                                     {s.name}
@@ -255,25 +269,34 @@ export default function PeoplePage() {
                     </fieldset>
 
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Фото</legend>
+                        <legend className="fieldset-legend">Photo</legend>
                         <div className="flex items-center gap-3">
                             {currentPhoto && !watch('removePhoto') && (
-                                <img src={currentPhoto} alt="" className="w-12 h-12 rounded-full object-cover object-top" />
+                                <img
+                                    src={currentPhoto}
+                                    alt=""
+                                    className="w-12 h-12 rounded-full object-cover object-top"
+                                />
                             )}
-                            <input {...register('photo')} type="file" accept="image/jpeg,image/png,image/webp" className="file-input flex-1" />
+                            <input
+                                {...register('photo')}
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                className="file-input flex-1"
+                            />
                         </div>
                         {currentPhoto && (
                             <label className="label cursor-pointer gap-2 mt-1">
                                 <input {...register('removePhoto')} type="checkbox" className="checkbox checkbox-sm" />
-                                Удалить текущее фото
+                                Remove current photo
                             </label>
                         )}
-                        <p className="label">Квадратное, от 800×800. Без фото на слайде будут инициалы.</p>
+                        <p className="label">Square, at least 800×800. Without a photo the slide shows initials.</p>
                     </fieldset>
 
                     <label className="label cursor-pointer gap-3">
                         <input {...register('isActive')} type="checkbox" className="toggle toggle-success" />
-                        Показывать на экранах
+                        Show on screens
                     </label>
                 </div>
             </Modal>
@@ -281,13 +304,13 @@ export default function PeoplePage() {
             <Modal
                 id="person-delete"
                 isOpen={deleting !== null}
-                title="Удалить человека?"
+                title="Delete person?"
                 onConfirm={onDelete}
                 onClose={() => setDeleting(null)}
                 isLoading={busy}
             >
-                {deleting?.fullName} пропадёт из списка вместе с фото. Чтобы просто перестать показывать — выключите
-                «Показывать на экранах».
+                {deleting?.fullName} will be removed along with their photo. To just stop showing them, turn off “Show
+                on screens”.
             </Modal>
         </div>
     );

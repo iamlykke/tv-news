@@ -10,7 +10,7 @@ function getClient() {
     if (client) return client;
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) throw new Error('NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY не заданы');
+    if (!url || !key) throw new Error('NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY are not set');
     client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
     return client;
 }
@@ -26,13 +26,13 @@ export async function uploadFile(kind: UploadKind, file: File): Promise<string> 
         body: JSON.stringify({ kind, contentType: file.type }),
     });
     const body = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(body.error || `Ошибка ${res.status}`);
+    if (!res.ok) throw new Error(body.error || `Error ${res.status}`);
 
     const { path, token, bucket } = body as { path: string; token: string; bucket: string };
     const { error } = await getClient()
         .storage.from(bucket)
         .uploadToSignedUrl(path, token, file, { contentType: file.type, cacheControl: '31536000' });
-    if (error) throw new Error(`Не удалось загрузить файл: ${error.message}`);
+    if (error) throw new Error(`Upload failed: ${error.message}`);
 
     return path;
 }

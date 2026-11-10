@@ -12,8 +12,8 @@ import type { TUser, TUserRole } from '@/types';
 type FormValues = { email: string; role: TUserRole };
 
 const ROLE_LABELS: Record<TUserRole, string> = {
-    ROLE_ADMIN: 'Admin — слайды и люди',
-    ROLE_FULL_ADMIN: 'Full Admin — плюс экраны и админы',
+    ROLE_ADMIN: 'Admin — slides and people',
+    ROLE_FULL_ADMIN: 'Full Admin — also screens and admins',
 };
 
 export default function UsersPage() {
@@ -42,14 +42,16 @@ export default function UsersPage() {
 
     useEffect(() => {
         load();
-        api<TUser>('/api/admin/me').then(setMe).catch(() => {});
+        api<TUser>('/api/admin/me')
+            .then(setMe)
+            .catch(() => {});
     }, [load]);
 
     const onSubmit = async (data: FormValues) => {
         setBusy(true);
         try {
             await api('/api/admin/users', { method: 'POST', json: data });
-            notify.success('Администратор добавлен — теперь он может войти через Google');
+            notify.success('Admin added — they can now sign in with Google');
             setAdding(false);
             await load();
         } catch (e) {
@@ -64,7 +66,7 @@ export default function UsersPage() {
         setBusy(true);
         try {
             await api(`/api/admin/users/${deleting.id}`, { method: 'DELETE' });
-            notify.success('Удалён');
+            notify.success('Deleted');
             setDeleting(null);
             await load();
         } catch (e) {
@@ -77,7 +79,7 @@ export default function UsersPage() {
     const onRoleChange = async (id: number, role: TUserRole) => {
         try {
             await api(`/api/admin/users/${id}`, { method: 'PATCH', json: { role } });
-            notify.success('Роль обновлена');
+            notify.success('Role updated');
             await load();
         } catch (e) {
             notify.error(errorMessage(e));
@@ -88,8 +90,8 @@ export default function UsersPage() {
         <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-semibold">Администраторы</h1>
-                    <p className="text-sm text-base-content/60">Войти в админку могут только эти Google-аккаунты</p>
+                    <h1 className="text-2xl font-semibold">Admins</h1>
+                    <p className="text-sm text-base-content/60">Only these Google accounts can sign in</p>
                 </div>
                 {isFullAdmin && (
                     <button
@@ -99,7 +101,7 @@ export default function UsersPage() {
                             setAdding(true);
                         }}
                     >
-                        <FaPlus className="text-xs" /> Добавить
+                        <FaPlus className="text-xs" /> Add
                     </button>
                 )}
             </div>
@@ -113,7 +115,7 @@ export default function UsersPage() {
                     <thead>
                         <tr>
                             <th>Email</th>
-                            <th>Роль</th>
+                            <th>Role</th>
                             {isFullAdmin && <th className="w-20"></th>}
                         </tr>
                     </thead>
@@ -123,7 +125,8 @@ export default function UsersPage() {
                             return (
                                 <tr key={user.id}>
                                     <td>
-                                        {user.email} {isSelf && <span className="badge badge-ghost badge-sm ml-1">это вы</span>}
+                                        {user.email}{' '}
+                                        {isSelf && <span className="badge badge-ghost badge-sm ml-1">you</span>}
                                     </td>
                                     <td>
                                         {isFullAdmin && !isSelf ? (
@@ -160,18 +163,18 @@ export default function UsersPage() {
             <Modal
                 id="add-user"
                 isOpen={adding}
-                title="Добавить администратора"
+                title="Add admin"
                 onConfirm={handleSubmit(onSubmit)}
                 onClose={() => setAdding(false)}
                 showCancel={false}
-                confirmText="Добавить"
+                confirmText="Add"
                 isLoading={busy}
             >
                 <div className="flex flex-col gap-3">
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Google-почта</legend>
+                        <legend className="fieldset-legend">Google email</legend>
                         <input
-                            {...register('email', { required: 'Обязательное поле' })}
+                            {...register('email', { required: 'Required' })}
                             type="email"
                             placeholder="name@gmail.com"
                             className={`input w-full ${errors.email ? 'input-error' : ''}`}
@@ -179,7 +182,7 @@ export default function UsersPage() {
                         {errors.email && <p className="text-error text-sm">{errors.email.message}</p>}
                     </fieldset>
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Роль</legend>
+                        <legend className="fieldset-legend">Role</legend>
                         <select {...register('role')} className="select w-full">
                             <option value="ROLE_ADMIN">{ROLE_LABELS.ROLE_ADMIN}</option>
                             <option value="ROLE_FULL_ADMIN">{ROLE_LABELS.ROLE_FULL_ADMIN}</option>
@@ -191,12 +194,12 @@ export default function UsersPage() {
             <Modal
                 id="delete-user"
                 isOpen={deleting !== null}
-                title="Удалить администратора?"
+                title="Remove admin?"
                 onConfirm={onDelete}
                 onClose={() => setDeleting(null)}
                 isLoading={busy}
             >
-                {deleting?.email} потеряет доступ к админке.
+                {deleting?.email} will lose access to the admin panel.
             </Modal>
         </div>
     );

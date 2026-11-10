@@ -14,7 +14,9 @@ export default function CelebrationsPage() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        api<TScreen[]>('/api/admin/screens').then(setScreens).catch(() => {});
+        api<TScreen[]>('/api/admin/screens')
+            .then(setScreens)
+            .catch(() => {});
     }, []);
 
     useEffect(() => {
@@ -38,19 +40,28 @@ export default function CelebrationsPage() {
     return (
         <div className="flex flex-col gap-8">
             <div className="flex flex-wrap justify-between items-center gap-4">
-                <h1 className="text-2xl font-semibold">Праздники</h1>
+                <h1 className="text-2xl font-semibold">Celebrations</h1>
                 <div className="flex items-center gap-2">
-                    <select className="select select-sm w-44 shrink-0" value={screen} onChange={e => setScreen(e.target.value)}>
-                        <option value="">Все экраны</option>
+                    <select
+                        className="select select-sm w-44 shrink-0"
+                        value={screen}
+                        onChange={e => setScreen(e.target.value)}
+                    >
+                        <option value="">All screens</option>
                         {screens.map(s => (
                             <option key={s.id} value={s.slug}>
                                 {s.name}
                             </option>
                         ))}
                     </select>
-                    <input type="date" className="input input-sm w-40 shrink-0" value={date} onChange={e => setDate(e.target.value)} />
+                    <input
+                        type="date"
+                        className="input input-sm w-40 shrink-0"
+                        value={date}
+                        onChange={e => setDate(e.target.value)}
+                    />
                     <button className="btn btn-sm" onClick={() => setDate(todayLocalIsoDay())}>
-                        Сегодня
+                        Today
                     </button>
                 </div>
             </div>
@@ -61,7 +72,7 @@ export default function CelebrationsPage() {
                     <span className="loading loading-spinner loading-lg" />
                 </div>
             )}
-            {empty && <p className="text-center py-16 text-base-content/50">В этот день праздников нет</p>}
+            {empty && <p className="text-center py-16 text-base-content/50">Nothing to celebrate on this day</p>}
             {data && <CelebrationPreviews birthdays={data.birthdays} anniversaries={data.anniversaries} />}
         </div>
     );

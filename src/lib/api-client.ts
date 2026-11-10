@@ -9,7 +9,7 @@ export async function api<T = unknown>(url: string, init?: RequestInit & { json?
         body: json !== undefined ? JSON.stringify(json) : rest.body,
     });
     const body = await res.json().catch(() => null);
-    if (!res.ok) throw new Error(body?.error || `Ошибка ${res.status}`);
+    if (!res.ok) throw new Error(body?.error || `Error ${res.status}`);
     return body as T;
 }
 
@@ -32,7 +32,7 @@ export function localInputToIso(value: string | null | undefined) {
 }
 
 export function formatDateTime(iso: string) {
-    return new Date(iso).toLocaleString('ru-RU', {
+    return new Date(iso).toLocaleString('en-GB', {
         day: '2-digit',
         month: '2-digit',
         year: '2-digit',
@@ -43,7 +43,7 @@ export function formatDateTime(iso: string) {
 
 export function formatDay(isoDay: string | null) {
     if (!isoDay) return '—';
-    return new Date(`${isoDay}T00:00:00Z`).toLocaleDateString('ru-RU', {
+    return new Date(`${isoDay}T00:00:00Z`).toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',

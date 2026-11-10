@@ -9,26 +9,26 @@ export class AppError extends Error {
 }
 
 export class UnauthenticatedError extends AppError {
-    constructor(message = 'Пользователь не авторизован') {
+    constructor(message = 'Not authenticated') {
         super(message, 401);
     }
 }
 
 export class ForbiddenError extends AppError {
-    constructor(message = 'Нет доступа') {
+    constructor(message = 'Access denied') {
         super(message, 403);
     }
 }
 
 export class NotFoundError extends AppError {
-    constructor(message = 'Не найдено') {
+    constructor(message = 'Not found') {
         super(message, 404);
     }
 }
 
 export class ValidationError extends AppError {
     constructor(
-        message = 'Ошибка валидации',
+        message = 'Validation error',
         public fields?: Record<string, string>,
     ) {
         super(message, 400);
@@ -36,7 +36,7 @@ export class ValidationError extends AppError {
 }
 
 export class DatabaseError extends AppError {
-    constructor(message = 'Ошибка работы с базой данных') {
+    constructor(message = 'Database error') {
         super(message, 503);
     }
 }

@@ -22,13 +22,20 @@ export default function BirthdaySlide({ person, background }: Props) {
 
             {/* фото-«наклейка» */}
             <div className="absolute" style={{ left: 170, top: 190, width: 620, height: 620 }}>
-                <div className="absolute inset-0 rounded-full" style={{ background: ink, transform: 'translate(26px, 26px)' }} />
+                <div
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: ink, transform: 'translate(26px, 26px)' }}
+                />
                 <div
                     className="absolute inset-0 rounded-full overflow-hidden flex items-center justify-center"
                     style={{ border: `16px solid ${ink}`, background: paper }}
                 >
                     {person.photoUrl ? (
-                        <img src={person.photoUrl} alt={person.fullName} className="w-full h-full object-cover object-top" />
+                        <img
+                            src={person.photoUrl}
+                            alt={person.fullName}
+                            className="w-full h-full object-cover object-top"
+                        />
                     ) : (
                         <span style={{ fontSize: 240, fontWeight: 900 }}>{initials(person.fullName)}</span>
                     )}
@@ -51,7 +58,10 @@ export default function BirthdaySlide({ person, background }: Props) {
             </div>
 
             {/* текст */}
-            <div className="absolute flex flex-col justify-center" style={{ left: 930, right: 110, top: 120, bottom: 160 }}>
+            <div
+                className="absolute flex flex-col justify-center"
+                style={{ left: 930, right: 110, top: 120, bottom: 160 }}
+            >
                 <span
                     className="self-start rounded-full font-text uppercase"
                     style={{
@@ -68,7 +78,13 @@ export default function BirthdaySlide({ person, background }: Props) {
 
                 <h1
                     className="uppercase"
-                    style={{ fontSize: 132, fontWeight: 900, lineHeight: 0.92, marginTop: 44, letterSpacing: '-0.02em' }}
+                    style={{
+                        fontSize: 132,
+                        fontWeight: 900,
+                        lineHeight: 0.92,
+                        marginTop: 44,
+                        letterSpacing: '-0.02em',
+                    }}
                 >
                     Happy
                     <br />

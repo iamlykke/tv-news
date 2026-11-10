@@ -10,7 +10,7 @@ export async function proxy(req: NextRequest) {
     if (token && !token.invalid) return NextResponse.next();
 
     if (req.nextUrl.pathname.startsWith('/api/')) {
-        return NextResponse.json({ error: 'Пользователь не авторизован' }, { status: 401 });
+        return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
     const loginUrl = new URL('/login', req.url);

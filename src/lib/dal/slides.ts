@@ -39,7 +39,7 @@ function serialize(s: SlideRow, now = new Date()): TSlide {
 function parseDateTime(value: unknown, field: string): Date | null {
     if (value === null || value === undefined || value === '') return null;
     const date = new Date(String(value));
-    if (isNaN(date.getTime())) throw new ValidationError(`${field}: некорректная дата`);
+    if (isNaN(date.getTime())) throw new ValidationError(`${field}: invalid date`);
     return date;
 }
 
@@ -89,7 +89,7 @@ export async function listAllSlides(): Promise<TSlide[]> {
 export async function getSlide(id: number): Promise<TSlide> {
     await getCurrentUser();
     const slide = await prisma.slide.findUnique({ where: { id }, include: withScreen });
-    if (!slide) throw new NotFoundError('Слайд не найден');
+    if (!slide) throw new NotFoundError('Slide not found');
     return serialize(slide);
 }
 
@@ -114,7 +114,7 @@ export async function createSlide(slug: string, input: SlideInput): Promise<TSli
 export async function updateSlide(id: number, input: SlideInput): Promise<TSlide> {
     await getCurrentUser();
     const current = await prisma.slide.findUnique({ where: { id } });
-    if (!current) throw new NotFoundError('Слайд не найден');
+    if (!current) throw new NotFoundError('Slide not found');
 
     const data: { storagePath?: string; showAfter?: Date | null; deleteAfter?: Date | null; isHidden?: boolean } = {};
     if (input.storagePath !== undefined && input.storagePath !== current.storagePath) {
@@ -133,6 +133,6 @@ export async function updateSlide(id: number, input: SlideInput): Promise<TSlide
 export async function softDeleteSlide(id: number) {
     await getCurrentUser();
     const slide = await prisma.slide.findUnique({ where: { id } });
-    if (!slide) throw new NotFoundError('Слайд не найден');
+    if (!slide) throw new NotFoundError('Slide not found');
     await prisma.slide.update({ where: { id }, data: { isDeleted: true } });
 }

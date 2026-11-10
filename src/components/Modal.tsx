@@ -23,8 +23,8 @@ export default function Modal({
     children,
     onConfirm,
     isLoading = false,
-    confirmText = 'ОК',
-    cancelText = 'Отмена',
+    confirmText = 'OK',
+    cancelText = 'Cancel',
     showCancel = true,
 }: IModalProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
