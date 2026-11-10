@@ -5,7 +5,7 @@ import { FaBirthdayCake, FaDesktop, FaImages, FaTv, FaUserShield, FaUsers } from
 import LogoutButton from '@/components/LogoutBtn';
 import UserProfile from '@/components/UserProfile';
 import { getCurrentUser } from '@/lib/dal/auth';
-import { listScreens } from '@/lib/dal/screens';
+import { listScreensPublic } from '@/lib/dal/screens';
 import { UnauthenticatedError } from '@/lib/errors';
 
 export const dynamic = 'force-dynamic';
@@ -22,14 +22,14 @@ function NavLink({ href, icon, children }: { href: string; icon?: React.ReactNod
 }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-    let user;
+    // Both in parallel: listScreensPublic does not re-check auth, getCurrentUser guards the page
+    let user, screens;
     try {
-        user = await getCurrentUser();
+        [user, screens] = await Promise.all([getCurrentUser(), listScreensPublic()]);
     } catch (e) {
         if (e instanceof UnauthenticatedError) redirect('/login');
         throw e;
     }
-    const screens = await listScreens();
 
     return (
         <div className="flex min-h-screen">

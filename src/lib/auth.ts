@@ -13,6 +13,8 @@ function bootstrapAdmins(): Set<string> {
     );
 }
 
+const USER_RECHECK_MS = 5 * 60 * 1000;
+
 async function findUser(email: string) {
     return prisma.user.findUnique({ where: { email }, select: { id: true, email: true, role: true } });
 }
@@ -49,8 +51,12 @@ export const authOptions: NextAuthOptions = {
             return !!(await findUser(email));
         },
         async jwt({ token, user }) {
+            // Re-check the user in the DB on sign-in and then at most every USER_RECHECK_MS,
+            // instead of on every request: a removed admin loses access within that window.
+            const fresh = !user && !token.invalid && token.checkedAt && Date.now() - token.checkedAt < USER_RECHECK_MS;
+            if (fresh) return token;
+
             try {
-                // При каждом обращении сверяемся с БД: удалённый админ теряет доступ сразу
                 const email = (user?.email ?? token.email)?.toLowerCase();
                 const dbUser = email ? await findUser(email) : null;
                 if (!dbUser) {
@@ -60,6 +66,7 @@ export const authOptions: NextAuthOptions = {
                     token.userId = dbUser.id;
                     token.email = dbUser.email;
                     token.role = dbUser.role;
+                    token.checkedAt = Date.now();
                 }
             } catch (error) {
                 console.error('[auth] failed to check user in DB', error);

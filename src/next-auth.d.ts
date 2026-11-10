@@ -11,6 +11,8 @@ declare module 'next-auth/jwt' {
         userId: number;
         email?: string | null;
         invalid?: boolean;
+        /** when the user was last verified against the DB (ms) */
+        checkedAt?: number;
         role: UserRole;
     }
 }

@@ -69,11 +69,10 @@ export async function listLiveSlides(screenId: number): Promise<TSlide[]> {
     return slides.map(s => serialize(s, now));
 }
 
-export async function listScreenSlides(slug: string): Promise<TSlide[]> {
+export async function listScreenSlides(screenId: number): Promise<TSlide[]> {
     await getCurrentUser();
-    const screen = await findScreenBySlug(slug);
     const slides = await prisma.slide.findMany({
-        where: { screenId: screen.id, isDeleted: false },
+        where: { screenId, isDeleted: false },
         orderBy: { createdAt: 'desc' },
         include: withScreen,
     });
