@@ -39,8 +39,8 @@ export default function CelebrationsPage() {
         <div className="flex flex-col gap-8">
             <div className="flex flex-wrap justify-between items-center gap-4">
                 <h1 className="text-2xl font-semibold">Праздники</h1>
-                <div className="flex flex-wrap items-center gap-2">
-                    <select className="select select-sm w-44" value={screen} onChange={e => setScreen(e.target.value)}>
+                <div className="flex items-center gap-2">
+                    <select className="select select-sm w-44 shrink-0" value={screen} onChange={e => setScreen(e.target.value)}>
                         <option value="">Все экраны</option>
                         {screens.map(s => (
                             <option key={s.id} value={s.slug}>
@@ -48,7 +48,7 @@ export default function CelebrationsPage() {
                             </option>
                         ))}
                     </select>
-                    <input type="date" className="input input-sm" value={date} onChange={e => setDate(e.target.value)} />
+                    <input type="date" className="input input-sm w-40 shrink-0" value={date} onChange={e => setDate(e.target.value)} />
                     <button className="btn btn-sm" onClick={() => setDate(todayLocalIsoDay())}>
                         Сегодня
                     </button>
