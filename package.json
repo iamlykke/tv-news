@@ -1,0 +1,47 @@
+{
+    "name": "tv-slides",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "vercel-build": "prisma migrate deploy && next build",
+        "start": "next start",
+        "lint": "eslint .",
+        "typecheck": "tsc --noEmit",
+        "postinstall": "prisma generate",
+        "db:migrate": "prisma migrate dev",
+        "db:deploy": "prisma migrate deploy",
+        "db:studio": "prisma studio"
+    },
+    "dependencies": {
+        "@prisma/adapter-pg": "7.10.1",
+        "@prisma/client": "7.10.1",
+        "@supabase/supabase-js": "^2.119.0",
+        "date-fns": "^4.1.0",
+        "dotenv": "^17.4.2",
+        "next": "^16.4.6",
+        "next-auth": "^4.24.15",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-hook-form": "^7.57.0",
+        "react-icons": "^5.5.0",
+        "react-slick": "^0.30.3",
+        "server-only": "^0.0.1",
+        "slick-carousel": "^1.8.1"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@types/node": "^24",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "@types/react-slick": "^0.23.13",
+        "daisyui": "5.5.19",
+        "eslint": "^9",
+        "eslint-config-next": "^16.4.6",
+        "prettier": "^3.8.1",
+        "prisma": "7.10.1",
+        "tailwindcss": "^4",
+        "typescript": "^5.9.2"
+    }
+}

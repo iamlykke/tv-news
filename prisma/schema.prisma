@@ -1,0 +1,67 @@
+generator client {
+    provider            = "prisma-client"
+    output              = "../src/generated/prisma"
+    moduleFormat        = "cjs"
+    importFileExtension = ""
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+/// Экран (локация), на котором крутятся слайды: /tv/<slug>
+model Screen {
+    id        Int      @id @default(autoincrement())
+    slug      String   @unique
+    name      String
+    /// IANA timezone, по нему считается «сегодня» для дней рождения и годовщин
+    timezone  String   @default("UTC")
+    createdAt DateTime @default(now())
+
+    slides Slide[]
+    people Person[]
+}
+
+model Slide {
+    id          Int       @id @default(autoincrement())
+    /// путь файла внутри Supabase Storage bucket
+    storagePath String
+    showAfter   DateTime?
+    deleteAfter DateTime?
+    isHidden    Boolean   @default(false)
+    isDeleted   Boolean   @default(false)
+    createdAt   DateTime  @default(now())
+
+    screenId Int
+    screen   Screen @relation(fields: [screenId], references: [id], onDelete: Cascade)
+
+    @@index([screenId, isDeleted])
+}
+
+/// Человек для слайдов дня рождения и годовщины
+model Person {
+    id          Int       @id @default(autoincrement())
+    fullName    String
+    photoPath   String?
+    dateOfBirth DateTime? @db.Date
+    startDate   DateTime? @db.Date
+    isActive    Boolean   @default(true)
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    /// null — показывать на всех экранах
+    screenId Int?
+    screen   Screen? @relation(fields: [screenId], references: [id], onDelete: SetNull)
+}
+
+enum UserRole {
+    ROLE_ADMIN
+    ROLE_FULL_ADMIN
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    role      UserRole @default(ROLE_ADMIN)
+    createdAt DateTime @default(now())
+}

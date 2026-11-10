@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+@import 'slick-carousel/slick/slick.css';
+@import './daisyui.css';
+
+/* inline: next/font кладёт переменные на <body>, а не на :root */
+@theme inline {
+    --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
+    --font-text: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+    background: var(--color-base-100);
+    color: var(--color-base-content);
+}
+
+/* react-slick: слайды на всю высоту экрана */
+.slick-list,
+.slick-track,
+.slick-slide > div {
+    height: 100%;
+}
