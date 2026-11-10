@@ -35,7 +35,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="flex min-h-screen">
             <aside className="w-72 shrink-0 h-screen border-r border-base-300 p-5 flex flex-col sticky top-0 bg-base-100">
                 <Link href="/admin" className="flex items-center gap-3 px-2 mb-6">
-                    <img src="/icon.png" alt="" className="w-9 h-9 rounded-lg" />
+                    <img src="/logo.svg" alt="" className="w-9 h-9" />
                     <span className="font-display text-lg font-bold">TV Slides</span>
                 </Link>
 

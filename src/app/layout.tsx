@@ -20,7 +20,6 @@ const text = Manrope({
 export const metadata: Metadata = {
     title: 'TV Slides',
     description: 'Слайды для офисных экранов',
-    icons: { icon: '/icon.png' },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

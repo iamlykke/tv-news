@@ -26,7 +26,7 @@ export default function LoginPageInner() {
         <div className="min-h-screen flex items-center justify-center p-6 bg-base-200">
             <div className="card bg-base-100 border border-base-300 w-full max-w-sm">
                 <div className="card-body items-center text-center gap-5">
-                    <img src="/icon.png" alt="" className="w-20 h-20 rounded-2xl" />
+                    <img src="/logo.svg" alt="" className="w-16 h-16" />
                     <div>
                         <h1 className="font-display text-2xl font-bold">TV Slides</h1>
                         <p className="text-sm text-base-content/60 mt-1">Управление слайдами на офисных экранах</p>
